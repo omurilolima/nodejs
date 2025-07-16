@@ -1,6 +1,9 @@
-const path = require("path");
-// The path.parse() method returns an object whose properties represent significant elements of the path.
-// more at https://nodejs.org/docs/latest/api/path.html#pathparsepath
-var pathObj = path.parse(__filename);
+// OS module is used for getting information about the
+// current operating system.
+const os = require("os");
 
-console.log(pathObj);
+var totalMemory = os.totalmem();
+var freeMemory = os.freemem();
+
+console.log(`Total Memory: ${totalMemory}`);
+console.log(`Free Memory: ${freeMemory}`);
