@@ -1,23 +1,25 @@
-// Working with File System Module
-// More at https://nodejs.org/docs/latest/api/fs.html
+// Working with Events Module
+// More at https://nodejs.org/docs/latest/api/events.html
 
-// Note that in this module almost every operation defined comes in two forms:
-// synchronous or blocking and asynchronous or non blocking. For exemple we
-// have "access" which is an asynchronous method and we also have "accessSync"
-// which is a synchronous method. Now, even though we have these synchronous
-// methods here, we shoul avoid using them.
-// In a real world application we should use asynchronous methods, because these
-// are non-blocking.
+// A lot of Node core functionality is based on the concept of Events.
+// An event is basically a signal that indicates that something has happened
+// in our application. For exemple, in Node, we have a class called http that we
+// can use to build a web server. So we listen on a given port, and every time we
+// receive a request on that port, that http class reaises an event.  So our job is
+// to read the request and return the right response.
 
-// A Node process has a single thread. If you're Node to build a backend for your
-// application, you might have several hundreds or thousands of clients connecting
-// to that backend. If you keep that single thread busy, you won't be able to
-// serve many clients. So, always use asynchronous methods.
+// Event Emmitter Class
+// https://nodejs.org/docs/latest/api/events.html#class-eventemitter
 
-const fs = require("fs");
+// The first letter is upper case because it is a class, not a function or simple value
+const EventEmitter = require("events");
+// In order to use this Event Emitter, first we need to create an instance of this class
+const emitter = new EventEmitter();
 
-// E.g: "readdir" reads the contents of a directory.
-fs.readdir("./", function (err, files) {
-	if (err) console.log("Error", err);
-	else console.log("Result", files);
+// Register a listener that will be called every time an event is raised.
+emitter.on("messageLogged", function () {
+	console.log("Listener called");
 });
+
+// Raise an event
+emitter.emit("messageLogged");
