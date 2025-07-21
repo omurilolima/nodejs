@@ -3,27 +3,25 @@
 const express = require("express");
 const app = express();
 
+const courses = [
+	{ id: 1, name: "course1" },
+	{ id: 2, name: "course2" },
+	{ id: 3, name: "course3" },
+];
+
 app.get("/", (req, res) => {
 	res.send("Hello World");
 });
 
 app.get("/api/courses", (req, res) => {
-	res.send([1, 2, 3]);
+	res.send(courses);
 });
 
 app.get("/api/courses/:id", (req, res) => {
-	res.send(req.params.id);
-});
-
-// Use route parameters (e.g. posts/2018/1) for essential or required values
-// Use query string parameters (e.g. ?sortBy=name) for anything that is optional
-
-app.get("/api/posts/:year/:month", (req, res) => {
-	// For getting route parameters
-	// res.send(req.params);
-
-	// For getting query string parameters
-	res.send(req.query);
+	const course = courses.find((c) => c.id === parseInt(req.params.id));
+	if (!course)
+		res.status(404).send("The course with the given ID was not found");
+	res.send(course);
 });
 
 const port = process.env.PORT || 3000;
