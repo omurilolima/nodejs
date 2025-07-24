@@ -1,6 +1,11 @@
-// JOI package documentation https://www.npmjs.com/package/joi
-// instal joi: "npm i joi"
+// More at Express middleware: https://expressjs.com/en/resources/middleware.html
 
+// USEFUL MIDDLEWARES
+// 		Helmet - Helps secure your apps by setting various HTTP headers: https://github.com/helmetjs/helmet
+// 		Morgan - HTTP request logger: https://expressjs.com/en/resources/middleware/morgan.html
+
+const morgan = require("morgan");
+const helmet = require("helmet");
 const Joi = require("joi");
 const logger = require("./logger");
 const auth = require("./auth");
@@ -10,7 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
+app.use(helmet());
+app.use(morgan("tiny"));
 app.use(logger);
 
 app.use(auth);
