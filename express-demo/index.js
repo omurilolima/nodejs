@@ -1,4 +1,9 @@
-// config package organizes hierarchical configurations for your app deployments. https://www.npmjs.com/package/config
+// NPM Pug: https://www.npmjs.com/package/pug
+// 		Pug is a high performance template engine heavily
+// 		influenced by Haml and implemented with JavaScript for Node.js and browsers.
+const startupDebugger = require("debug")("app:startup");
+const dbDebugger = require("debug")("app:db");
+
 const config = require("config");
 const morgan = require("morgan");
 const helmet = require("helmet");
@@ -7,6 +12,9 @@ const logger = require("./logger");
 const auth = require("./auth");
 const express = require("express");
 const app = express();
+
+app.set("view engine", "pug");
+app.set("views", "./views"); // default
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,10 +31,16 @@ console.log("Mail Password: " + config.get("mail.password"));
 // Enable logging of http requests only on the development machine
 if (app.get("env") === "development") {
 	app.use(morgan("tiny"));
-	console.log("Morgan enabled...");
+	startupDebugger("Morgan enabled..."); // $env:DEBUG = "app:startup"'
 }
-app.use(logger);
 
+// Db work...
+dbDebugger("Connected to the database..."); // $env:DEBUG = "app:db"'
+
+// To see debugging messages for multiples name spaces, use a comma:  $env:DEBUG = "app:startup, app:db"
+// To see ALL the debugging messages, use a wild card:  $env:DEBUG = "app:*"
+
+app.use(logger);
 app.use(auth);
 
 const courses = [
@@ -36,7 +50,7 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-	res.send("Hello World");
+	res.render("index", { title: "My Express App", message: "Hello" });
 });
 
 app.get("/api/courses", (req, res) => {
