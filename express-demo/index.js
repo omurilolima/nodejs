@@ -1,9 +1,5 @@
-// More at Express middleware: https://expressjs.com/en/resources/middleware.html
-
-// USEFUL MIDDLEWARES
-// 		Helmet - Helps secure your apps by setting various HTTP headers: https://github.com/helmetjs/helmet
-// 		Morgan - HTTP request logger: https://expressjs.com/en/resources/middleware/morgan.html
-
+// config package organizes hierarchical configurations for your app deployments. https://www.npmjs.com/package/config
+const config = require("config");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const Joi = require("joi");
@@ -16,6 +12,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
+
+// Configuration
+console.log("Application Name: " + config.get("name"));
+console.log("Mail Server: " + config.get("mail.host"));
+
+// 		set a password environment variable: '$env:app_password = "your-password"'
+console.log("Mail Password: " + config.get("mail.password"));
+
 // Enable logging of http requests only on the development machine
 if (app.get("env") === "development") {
 	app.use(morgan("tiny"));
