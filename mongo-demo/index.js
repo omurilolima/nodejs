@@ -36,7 +36,9 @@ async function createCourse(){
 async function getCourses(){
 	// Get all courses
 	const courses = await Course
-		.find({ author: 'Mosh', isPublished: true })
+		// .find({ author: 'Mosh', isPublished: true })
+		// .find({ price: { $gte: 10, $lte: 20}})
+		.find( {price: { $in: [10, 15, 20] } } )
 		.limit(10) // Limit the number of results to 10
 		.sort({ name: 1 }) // Sort by name in ascending order
 		.select({ name: 1, tags: 1 }); // Select only name and tags fields
@@ -44,3 +46,12 @@ async function getCourses(){
 }
 
 getCourses();
+// Comparison Query Operators in Mongoose queries:
+// eq -> equal
+// ne -> not equal
+// gt -> greater than
+// gte -> greater than or equal to
+// lt -> less than
+// lte -> less than or equal to
+// in -> in an array
+// nin -> not in an array 
