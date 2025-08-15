@@ -11,7 +11,7 @@ mongoose
 // We use a schema in Mangoose to define the shape of documents in a MongoDB collection.
 
 const courseSchema = new mongoose.Schema({
-	name: String,
+	name: { type: String, required: true },	// This validation logic is specific to Mongoose, not MongoDB
 	author: String,
 	tags: [ String ],
 	date: { type: Date, default: Date.now },
@@ -20,19 +20,23 @@ const courseSchema = new mongoose.Schema({
 
 const Course = mongoose.model('Course', courseSchema);
 
-
 async function createCourse(){
 	// Create a course
 	const course = new Course({
-		name: 'Angular Course',
-		author: 'Mosh',
+		// name: 'React Course',
+		author: 'Murilo Lima',
 		tags: ['angular', 'frontend'],
 		isPublished: true
 	})
 	
-	// Save the course to the database
-	const result = await course.save()
-	console.log(result);
+	try {
+		// Save the course to the database
+		const result = await course.save()
+		console.log(result);
+	} catch (error) {
+		// If there is an error, log the error message
+		console.log('Error creating course:', error.message);
+	}
 }
 
 async function getCourses(){
@@ -69,5 +73,4 @@ async function removeCourse(id){
 	console.log(result);
 }
 
-removeCourse('689f665b1046ebddbdb28f5f')
-	.then(() => mongoose.disconnect())
+createCourse();
