@@ -1,4 +1,5 @@
-// More on Update Operators: https://www.mongodb.com/pt-br/docs/manual/reference/operator/update/
+// Start the MongoDB server before running this script
+// Use the command: mongod
 
 const mongoose = require("mongoose");
 
@@ -11,11 +12,28 @@ mongoose
 // We use a schema in Mangoose to define the shape of documents in a MongoDB collection.
 
 const courseSchema = new mongoose.Schema({
-	name: { type: String, required: true },	// This validation logic is specific to Mongoose, not MongoDB
+	name: { 
+		type: String, 
+		required: true,
+		minlength: 5, // Minimum length of the name
+		maxlength: 255, // Maximum length of the name
+		// match: /pattern/ // Regular expression pattern to validate the name 
+	},
+	category: {
+		type: String,
+		required: true,
+		enum: ['web', 'mobile', 'network'], // The category must be one of the specified values
+	},
 	author: String,
 	tags: [ String ],
 	date: { type: Date, default: Date.now },
-	isPublished: Boolean
+	isPublished: Boolean,
+	price: {
+		type: Number,
+		required: function() { return this.isPublished; }, // Price is required if the course is published
+		min: 10, // Minimum price
+		max: 200 // Maximum price
+	}
 })
 
 const Course = mongoose.model('Course', courseSchema);
@@ -23,10 +41,12 @@ const Course = mongoose.model('Course', courseSchema);
 async function createCourse(){
 	// Create a course
 	const course = new Course({
-		// name: 'React Course',
+		name: 'Mongo Course',
+		category: '-',
 		author: 'Murilo Lima',
 		tags: ['angular', 'frontend'],
-		isPublished: true
+		isPublished: true,
+		price: 15,
 	})
 	
 	try {
