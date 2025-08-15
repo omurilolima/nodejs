@@ -28,9 +28,14 @@ const courseSchema = new mongoose.Schema({
 	tags: {
 		type: Array,
 		validate: {
-			// Custom validation function to ensure the tags array has at least 1 item
 			validator: function(value) {
-				return v && value.length > 0; // Ensure the array is not empty
+				// Custom validation function to check if the tags array is not empty
+				// This function returns a promise that resolves to true or false
+				return new Promise((resolve) => {
+					setTimeout(() => {
+					resolve(value && value.length > 0) // Check if the array is not empty
+				}, 4000);
+				});
 			},
 			message: 'A course should have at least one tag.' // Error message if validation fails
 		}
