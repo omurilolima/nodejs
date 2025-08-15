@@ -61,4 +61,13 @@ async function updateCourse(id){
 	console.log(course);
 }
 
-updateCourse('689f665b1046ebddbdb28f5f')
+async function removeCourse(id){
+	// Remove a course by id
+	// const result = await Course.deleteOne({_id: id})
+	// Find the course by id and remove it
+	const course = await Course.findByIdAndRemove(id);
+	console.log(result);
+}
+
+removeCourse('689f665b1046ebddbdb28f5f')
+	.then(() => mongoose.disconnect())
