@@ -34,20 +34,16 @@ async function createCourse(){
 }
 
 async function getCourses(){
-	// Regular Expressions
+	// Pagination
+    const pageNumber = 2
+    const pageSize = 10
 	const courses = await Course
-        // Starts with Mosh
-        .find({ author: /^Mosh/ })
-
-        // Ends with Hamedani (case insensitive)
-        .find({ author: /Hamedani$/i })
-
-        // Contains Mosh. .* in regular expression means zero or more characters
-        .find({ author: /.*Mosh.*/i })
-
-		.limit(10) // Limit the number of results to 10
+        // Get the documents in a given page
+        .find({ author: 'Mosh', isPublished: true }) // Courses by authors whose name starts with 'Mosh' and are published
+        .skip((pageNumber - 1) * pageSize) // Skip the first (pageNumber - 1) * pageSize items
+        .limit(pageSize) // Limit the result to pageSize items
 		.sort({ name: 1 }) // Sort by name in ascending order
-		.select({ name: 1, tags: 1 }); // Select only name and tags fields
+        .select({ name: 1, tags: 1 }) // Select only the name and tags fields
 	console.log(courses);
 }
 
