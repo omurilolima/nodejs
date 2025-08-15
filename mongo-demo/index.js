@@ -1,3 +1,5 @@
+// More on Update Operators: https://www.mongodb.com/pt-br/docs/manual/reference/operator/update/
+
 const mongoose = require("mongoose");
 
 mongoose
@@ -48,13 +50,15 @@ async function getCourses(){
 }
 
 async function updateCourse(id){
-	const course = await Course.findById(id);
-	if (!course) return;
-
-	course.isPublished = true;
-	course.author = 'Another Author';
-	const result = await course.save();
-	console.log(result);
+	// const result = await Course.updateOne({_id: id}, {
+	const course = await Course.findByIdAndUpdate(id, {
+		// Update the course with the given id
+		$set: {
+			author: 'Murilo Lima',
+			isPublished: false
+		} 
+	}, { new: true }); // new: true option returns the updated document instead of the original document
+	console.log(course);
 }
 
 updateCourse('689f665b1046ebddbdb28f5f')
