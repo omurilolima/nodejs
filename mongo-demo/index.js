@@ -46,7 +46,9 @@ const courseSchema = new mongoose.Schema({
 		type: Number,
 		required: function() { return this.isPublished; }, // Price is required if the course is published
 		min: 10, // Minimum price
-		max: 200 // Maximum price
+		max: 200, // Maximum price
+		get: v => Math.round(v), // Getter to round the price value
+		set: v => Math.round(v) // Setter to round the price value
 	}
 })
 
@@ -58,9 +60,9 @@ async function createCourse(){
 		name: 'Mongo Course',
 		category: 'web',
 		author: 'Murilo Lima',
-		tags: [],
+		tags: ['database', 'backend'],
 		isPublished: true,
-		price: 15,
+		price: 15.8 // Price will be rounded to 16,
 	})
 	
 	try {
